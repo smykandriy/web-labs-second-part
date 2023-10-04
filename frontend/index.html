@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Helicopters</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <h2 class="title">Helicopters</h2>
+        <nav>
+          <ul>
+            <li><a href="">My helicopters</a></li>
+            <li><a href="">Create helicopter</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="search">
+        <input
+          type="text"
+          class="searchInput"
+          placeholder="Search by Model..."
+        />
+        <button class="searchButton">Search</button>
+      </div>
+    </header>
+
+    <div class="section">
+      <aside>
+        <div class="sorting">
+          <h3 class="manageTitle">Manage helicopters</h3>
+          <div class="sort-toggle">
+            <p class="buttonLabel">Sort by Take Off Weight</p>
+            <button class="sort-button">Sort</button>
+          </div>
+        </div>
+        <hr />
+        <div class="counter">
+          <p class="buttonLabel">Count total take off weight</p>
+          <button class="count">Count</button>
+        </div>
+        <div class="counterOutput">
+          <p></p>
+        </div>
+      </aside>
+
+      <div id="helicopter-list"></div>
+    </div>
+
+    <script src="./js/main.js"></script>
+  </body>
+</html>
