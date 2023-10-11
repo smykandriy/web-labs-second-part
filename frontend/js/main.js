@@ -1,75 +1,101 @@
+import { fetchHelicopters, data } from "./api.js";
+import {
+  sortByTakeOffWeight,
+  searchByModel,
+  countTotalTakeOffWeight,
+} from "./methods.js";
+import { overlay, openModal, closeModal, closeEditModal } from "./modals.js";
+
 document.addEventListener("DOMContentLoaded", function () {
-  const helicopterList = document.getElementById("helicopter-list");
   const sortToggle = document.querySelector(".sort-toggle");
   const countButton = document.querySelector(".count");
-  const counterOutput = document.querySelector(".counterOutput p");
-  const searchInput = document.querySelector(".searchInput");
   const searchButton = document.querySelector(".searchButton");
+  const openModalBtn = document.querySelector(".open");
+  const closeModalBtn = document.querySelector(".close");
+  const editHelicopterForm = document.getElementById("editHelicopterForm");
+  const createHelicopterForm = document.getElementById("createHelicopterForm");
 
-  let data = [];
+  createHelicopterForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
 
-  async function fetchHelicopters() {
+    const data = new FormData(createHelicopterForm);
+
+    console.log(Array.from(data));
+
     try {
       const response = await fetch(
-        "http://localhost:8005/aircraft/helicopters/"
+        "http://localhost:8005/aircraft/helicopters/",
+        {
+          method: "POST",
+          body: data,
+        }
       );
-      data = await response.json();
-      displayHelicopters(data);
+
+      const responseData = await response.json();
+
+      console.log(responseData);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error(error);
     }
+  });
+
+  var selectedHelicopter = null;
+
+  const editCloseButton = document.querySelector(".edit-close");
+  editCloseButton.addEventListener("click", closeEditModal);
+
+  function openEditModal(helicopter) {
+    const editModal = document.querySelector(".edit-modal");
+    document.getElementById("editModel").value = helicopter.model;
+    document.getElementById("editWeight").value = helicopter.weight;
+    document.getElementById("editFuelCapacity").value =
+      helicopter.fuel_capacity;
+    document.getElementById("editMaxAltitude").value = helicopter.max_altitude;
+    document.getElementById("editTakeOffWeight").value =
+      helicopter.take_off_weight;
+
+    editModal.classList.remove("hidden");
+    selectedHelicopter = helicopter;
   }
 
-  function displayHelicopters(dataToDisplay) {
-    helicopterList.innerHTML = "";
-    let currentRow;
+  document.addEventListener("click", function (event) {
+    if (event.target && event.target.classList.contains("edit-button")) {
+      const helicopterId = event.target.getAttribute("data-id");
+      const selectedHelicopter = data.find((h) => h.id == helicopterId);
+      openEditModal(selectedHelicopter);
+    }
+  });
 
-    dataToDisplay.forEach((helicopter, index) => {
-      if (index % 3 === 0) {
-        currentRow = document.createElement("div");
-        currentRow.classList.add("containerRows");
-        helicopterList.appendChild(currentRow);
-      }
+  editHelicopterForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const data = new FormData(editHelicopterForm);
 
-      const helicopterItem = document.createElement("div");
-      helicopterItem.classList.add("helicopter-item");
+    try {
+      const response = await fetch(
+        `http://localhost:8005/aircraft/helicopters/${selectedHelicopter.id}/`,
+        {
+          method: "PUT",
+          body: data,
+        }
+      );
 
-      helicopterItem.innerHTML = `
-        <img src="assets/images/helicopter.jpg" />
-        <h3>${helicopter.model}</h4>
-        <p>Weight: ${helicopter.weight}</p>
-        <p>Fuel Capacity: ${helicopter.fuel_capacity}</p>
-        <p>Max Altitude: ${helicopter.max_altitude}</p>
-        <p>Take Off Weight: ${helicopter.take_off_weight}</p>
-      `;
+      const responseData = await response.json();
+      console.log(responseData);
 
-      currentRow.appendChild(helicopterItem);
-    });
-  }
+      const editModal = document.querySelector(".edit-modal");
+      editModal.classList.add("hidden");
 
-  function sortByTakeOffWeight() {
-    const sortedData = [...data];
-    sortedData.sort((a, b) => a.take_off_weight - b.take_off_weight);
-    displayHelicopters(sortedData);
-  }
-
-  function countTotalTakeOffWeight() {
-    const totalWeight = data.reduce((acc, helicopter) => {
-      return acc + parseFloat(helicopter.take_off_weight);
-    }, 0);
-    counterOutput.textContent = `Helicopters can take off: ${totalWeight} tonns`;
-  }
-
-  function searchByModel() {
-    const searchQuery = searchInput.value.toLowerCase();
-    const filteredData = data.filter((helicopter) =>
-      helicopter.model.toLowerCase().includes(searchQuery)
-    );
-    displayHelicopters(filteredData);
-  }
+      fetchHelicopters();
+    } catch (error) {
+      console.log(error);
+    }
+  });
 
   fetchHelicopters();
 
+  openModalBtn.addEventListener("click", openModal);
+  closeModalBtn.addEventListener("click", closeModal);
+  overlay.addEventListener("click", closeModal);
   sortToggle.addEventListener("click", sortByTakeOffWeight);
   countButton.addEventListener("click", countTotalTakeOffWeight);
   searchButton.addEventListener("click", searchByModel);
