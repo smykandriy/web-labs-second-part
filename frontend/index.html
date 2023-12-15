@@ -18,7 +18,69 @@
         <nav>
           <ul>
             <li><a href="">My helicopters</a></li>
-            <li><a href="">Create helicopter</a></li>
+            <li>
+              <div class="overlay hidden"></div>
+              <button class="buttonModal open">Create Helicopter</button>
+              <section class="modal hidden">
+                <div class="flex">
+                  <button class="close">⨉</button>
+                </div>
+                <h2>Create Helicopter</h2>
+                <form id="createHelicopterForm">
+                  <div>
+                    <label for="model">Model</label>
+                    <input
+                      type="text"
+                      name="model"
+                      placeholder="M8"
+                      id="model"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label for="model">Weight</label>
+                    <input
+                      type="number"
+                      name="weight"
+                      placeholder="7.700"
+                      id="weight"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label for="model">Fuel capacity</label>
+                    <input
+                      type="number"
+                      id="fuel_capacity"
+                      name="fuel_capacity"
+                      placeholder="1300"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label for="model">Max altitude</label>
+                    <input
+                      type="number"
+                      id="max_altitude"
+                      name="max_altitude"
+                      placeholder="8.800"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label for="take_off_weight">Take off weight</label>
+                    <input
+                      type="number"
+                      id="take_off_weight"
+                      name="take_off_weight"
+                      placeholder="7"
+                      required
+                    />
+                  </div>
+                  <button class="buttonModal" type="submit">Submit</button>
+                </form>
+              </section>
+            </li>
           </ul>
         </nav>
       </div>
@@ -31,6 +93,51 @@
         <button class="searchButton">Search</button>
       </div>
     </header>
+
+    <div class="edit-modal hidden">
+      <div class="modal-content">
+        <span class="edit-close">×</span>
+        <h2>Edit Helicopter</h2>
+        <form id="editHelicopterForm">
+          <div>
+            <label for="editModel">Model:</label>
+            <input type="text" id="editModel" name="model" required />
+          </div>
+          <div>
+            <label for="editWeight">Weight:</label>
+            <input type="number" id="editWeight" name="weight" required />
+          </div>
+          <div>
+            <label for="editFuelCapacity">Fuel Capacity:</label>
+            <input
+              type="number"
+              id="editFuelCapacity"
+              name="fuel_capacity"
+              required
+            />
+          </div>
+          <div>
+            <label for="editMaxAltitude">Max Altitude:</label>
+            <input
+              type="number"
+              id="editMaxAltitude"
+              name="max_altitude"
+              required
+            />
+          </div>
+          <div>
+            <label for="editTakeOffWeight">Take Off Weight:</label>
+            <input
+              type="number"
+              id="editTakeOffWeight"
+              name="take_off_weight"
+              required
+            />
+          </div>
+          <button type="submit" class="edit-save-button">Save</button>
+        </form>
+      </div>
+    </div>
 
     <div class="section">
       <aside>
@@ -54,6 +161,6 @@
       <div id="helicopter-list"></div>
     </div>
 
-    <script src="./js/main.js"></script>
+    <script type="module" src="./js/main.js"></script>
   </body>
 </html>
